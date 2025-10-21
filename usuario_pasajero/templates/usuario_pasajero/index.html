@@ -1,0 +1,106 @@
+{% extends "usuario_pasajero/base.html" %}
+
+{% block body %}
+<h3 class="m-4 text-center">Todos los Usuarios Pasajeros</h3>
+
+{% if usuarios %}
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-light mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-list"></i> Lista de Usuarios Pasajeros
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id Usuario Pasajero</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Fecha de Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.id_usuario_pasajero }}</td>
+                            <td>{{ usuario.nombre }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.telefono }}</td>
+                            <td>{{ usuario.fecha_registro }}</td>
+                            <td>
+                                <!-- Botón de información -->
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ usuario.id_usuario_pasajero }}">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </button>
+
+                                <!-- Modal de información -->
+                                <div class="modal fade" id="modal{{ usuario.id_usuario_pasajero }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">{{ usuario.nombre }} - {{ usuario.email }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>Id Usuario Pasajero:</strong> {{ usuario.id_usuario_pasajero }}</li>
+                                                    <li><strong>Nombre:</strong> {{ usuario.nombre }}</li>
+                                                    <li><strong>Email:</strong> {{ usuario.email }}</li>
+                                                    <li><strong>Teléfono:</strong> {{ usuario.telefono }}</li>
+                                                    <li><strong>Fecha de Registro:</strong> {{ usuario.fecha_registro }}</li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botón Editar -->
+                                <a class="btn btn-warning me-1" href="{% url 'usuario_pasajero:edit' usuario.id_usuario_pasajero %}">
+                                    <i class="fa-solid fa-pen fa-lg"></i>
+                                </a>
+
+                                <!-- Botón Eliminar -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#borrar{{ usuario.id_usuario_pasajero }}">
+                                    <i class="fa-solid fa-trash fa-lg"></i>
+                                </button>
+
+                                <!-- Modal Confirmación de Eliminación -->
+                                <div class="modal fade" id="borrar{{ usuario.id_usuario_pasajero }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Confirmar eliminación</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Estás seguro de que deseas eliminar al usuario <strong>{{ usuario.nombre }}</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form method="POST" action="{% url 'usuario_pasajero:borrar' usuario.id_usuario_pasajero %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning text-center">No hay usuarios pasajeros registrados.</div>
+{% endif %}
+{% endblock %}

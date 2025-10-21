@@ -1,0 +1,27 @@
+{% extends "usuario_pasajero/base.html" %}
+
+{% block body %}
+<h3 class="text-center m-4">Eliminar Usuario Pasajero</h3>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        <div class="card mb-3">
+            <div class="card-header bg-danger text-white">
+                <i class="fa-solid fa-trash fa-lg"></i> Confirmar Eliminación
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    ¿Estás seguro de que deseas eliminar el usuario <strong>{{ usuario.nombre }} ({{ usuario.email }})</strong>?
+                    Esta acción no se puede deshacer.
+                </p>
+                
+                <form method="POST" action="{% url 'usuario_pasajero:borrar' usuario.id_usuario_pasajero %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                    <a href="{% url 'usuario_pasajero:index' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
